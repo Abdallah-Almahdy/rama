@@ -28,6 +28,7 @@
     use App\Livewire\StaticesController as LivewireStaticesController;
     use Illuminate\Http\Request;
     use App\Http\Controllers\Back\PromocodesController;
+use App\Http\Controllers\ConfigController;
 
     /*      Routes start    */
 
@@ -60,6 +61,8 @@
         // Route::resource('delivery', sectionsController::class);
         Route::resource('companies', companisController::class);
         Route::resource('products', productsController::class);
+        Route::put('configs', [ConfigController::class, 'update'])->name('configs.update');
+        Route::get('configs/edit', [ConfigController::class, 'edit'])->name('configs.edit');
 
 
 

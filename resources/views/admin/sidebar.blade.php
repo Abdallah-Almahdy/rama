@@ -103,6 +103,13 @@
                                 <p>تسجيل يوزر جديد</p>
                             </a>
                         </li>
+                           <li class="nav-item">
+                        <a href="{{ route('configs.edit') }}"
+                            class="nav-link {{ Request::is('dashboard/configs*') ? 'active' : '' }}">
+                            <i class="fas fa-cog nav-icon  "></i>
+                            <p>الاعدادات</p>
+                        </a>
+                    </li>
                     @endif
                 @endcan
             </ul>

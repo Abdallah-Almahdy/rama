@@ -25,6 +25,7 @@ class Index extends Component
     public $search = '';  //  a property for search
     public $showZeroStock = false; // Property to toggle between showing all products or only those with 0 stock
     public $showBulkActions = false;
+    public $showInactiveStock = false; // Property to toggle between showing all products or only inactive products
     // Delete selected products
     public function toggleBulkActions()
     {
@@ -63,6 +64,10 @@ class Index extends Component
         $this->showZeroStock = !$this->showZeroStock; // Toggle the filter
     }
 
+    public function filterInactiveStock()
+    {
+        $this->showInactiveStock = !$this->showInactiveStock; // Toggle the filter
+    }
     // Update section for selected products
     public function updateSection()
     {
@@ -107,17 +112,23 @@ class Index extends Component
         $this->resetPage();
     }
 
-    public function changeAvailability($productId, $quantity)
+    public function changeAvailability($productId)
     {
         // Find the product by ID
         $product = Product::find($productId);
 
         if ($product) {
             // Update the product quantity
-            $product->qnt = $quantity;
+            $product->active = !$product->active;
+            if ($product->qnt == 0) {
+                $product->active = 0;
+                session()->flash('success', 'لا يمكن تفعيل المنتج لأنه نفذت كميته من المخزن!');
+                return;
+            }
             $product->save();
 
             // Provide success feedback
+
             session()->flash('success', 'تم تحديث حالة المنتج بنجاح!');
         } else {
             session()->flash('error', 'المنتج غير موجود!');
@@ -166,6 +177,10 @@ class Index extends Component
         if ($this->showZeroStock) {
             $products = Product::where('qnt', 0)->orderBy('created_at', 'desc')->paginate($this->perPage);
             $this->viewLinks = false;
+        } elseif ($this->showInactiveStock) {
+            $products = Product::where('is_avaliable', 0)->orderBy('created_at', 'desc')->paginate($this->perPage);
+
+            $this->viewLinks = false;
         } else {
             if ($this->search === '') {
                 $products = Product::orderBy('created_at', 'desc')->paginate($this->perPage);
@@ -175,6 +190,7 @@ class Index extends Component
                 $this->viewLinks = false;
             }
         }
+
 
         return view('livewire.products.Index', [
             'products' => $products,

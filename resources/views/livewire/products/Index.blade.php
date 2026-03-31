@@ -1,18 +1,4 @@
     <div>
-
-        <!-- Flash Messages -->
-        @if (session()->has('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-        @if (session()->has('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
-
-
         <div class="container">
             <div class="mt-4 mb-4">
 
@@ -136,7 +122,15 @@
                                                 @endif
                                             </button>
 
-
+                                            <button type="button" wire:click="filterInactiveStock"
+                                                class="w-12 h-12 rounded-full bg-yellow-500 hover:bg-yellow-400 text-white flex items-center justify-center transition duration-200"
+                                                title="{{ $showInactiveStock ? 'عرض جميع المنتجات' : 'عرض المنتجات  الغير متاحه' }}">
+                                                @if ($showInactiveStock)
+                                                    <i class="fas fa-toggle-on fa-lg"></i>
+                                                @else
+                                                    <i class="fas fa-toggle-off fa-lg"></i>
+                                                @endif
+                                            </button>
 
 
 
@@ -228,13 +222,13 @@
                                                 <i class="fas fa-eye text-xs"></i>
                                             </a>
 
-                                            @if ($product->qnt > 0)
-                                                <button wire:click="changeAvailability({{ $product->id }}, 0)"
+                                            @if ($product->active == 1 && $product->qnt > 0)
+                                                <button wire:click="changeAvailability({{ $product->id }})"
                                                     class="w-8 h-8 flex items-center justify-center rounded-full bg-red-500 hover:bg-red-600 text-white transition-shadow shadow-sm">
                                                     <i class="fas fa-times text-xs"></i>
                                                 </button>
                                             @else
-                                                <button wire:click="changeAvailability({{ $product->id }}, 1000)"
+                                                <button wire:click="changeAvailability({{ $product->id }})"
                                                     class="w-8 h-8 flex items-center justify-center rounded-full bg-green-500 hover:bg-green-600 text-white transition-shadow shadow-sm">
                                                     <i class="fas fa-check text-xs"></i>
                                                 </button>

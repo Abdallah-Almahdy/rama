@@ -21,16 +21,21 @@ class Edit extends Component
     public $offer_rate;
     public $bestSaller;
     public $comeFirst;
-  
-  public function mount($data)
-{
-    $this->bestSaller = $data->best_saller; // 1 أو 0
-	
-    $this->comeFirst = $data->come_first;
-   	
-  }
-  
-  
+    public $active;
+    public $is_avaliable;
+    public $stockQnt;
+    public function mount($data)
+    {
+
+        $this->bestSaller = (bool)$data->best_saller;
+        $this->comeFirst = (bool) $data->come_first;
+        $this->qnt = (bool)$data->qnt;
+        $this->active = (bool)$data->active;
+        $this->is_avaliable = (bool) $data->is_avaliable;
+        $this->stockQnt = $data->qnt;
+    }
+
+
     public function update()
     {
         $product = product::find($this->data->id);
@@ -61,32 +66,58 @@ class Edit extends Component
             $product->photo = $this->photo->storeAs('products', rand() . '.jpg', 'my_public');
         }
 
-       if ($this->offer_rate + 0 === 0) {
+        if ($this->offer_rate + 0 === 0) {
 
             $product->offer_rate = 0;
         }
-      if($this->offer_rate){
-        if ($this->offer_rate + 0 > 0) {
-            $this->validate(['offer_rate' => 'integer',]);
-            $product->offer_rate = $this->offer_rate;
-        }
-      }
-        // dd($this->qnt);
-        if ($this->qnt != null) {
-            if ($this->qnt == 1) {
-                $product->qnt = 5000;
-            }
-            if ($this->qnt == 0) {
-                $product->qnt = 0;
+        if ($this->offer_rate) {
+            if ($this->offer_rate + 0 > 0) {
+                $this->validate(['offer_rate' => 'integer',]);
+                $product->offer_rate = $this->offer_rate;
             }
         }
 
-        
-            $product->best_saller = $this->bestSaller;
-        
-            $product->come_first = $this->comeFirst;
-        
-       
+        $product->qnt = $this->stockQnt;
+        $product->best_saller = $this->bestSaller;
+        $product->come_first = $this->comeFirst;
+        $product->is_avaliable = $this->is_avaliable;
+        $product->active = $this->active;
+
+
+        $config = \App\Models\Config::first();
+
+        if ($config->withQnt == 'yes') {
+
+            if ($config->qntStatus == 'unavailable') {
+                if ($this->stockQnt == 0) {
+                    $product->is_avaliable = 0;
+                    $product->active = 1;
+                } else {
+                    $product->is_avaliable = $this->is_avaliable;
+                }
+            } elseif ($config->qntStatus == 'inactive') {
+                if ($this->stockQnt + 0 > 0) {
+                    $product->active = 1;
+                    $product->is_avaliable = 1;
+                } else {
+                    $product->active = 0;
+                }
+            } elseif ($config->qntStatus == 'both') {
+                $product->is_avaliable = 0;
+                $product->active = 0;
+            }
+        } elseif ($this->is_avaliable == 0) {
+
+            $product->qnt = 0;
+            $product->is_avaliable = 0;
+        } elseif ($this->is_avaliable == 1) {
+
+            $product->is_avaliable = 1;
+            $product->qnt  = 1;
+        }
+
+
+
         $product->save();
 
         $this->redirectRoute('products.index');
