@@ -12,15 +12,13 @@ use App\Http\Controllers\Api\productsController;
 use App\Http\Controllers\Api\rateController;
 use App\Http\Controllers\Api\sectionsController;
 use App\Http\Controllers\Api\prompCodeController;
-
-
-
+use App\Http\Controllers\ConfigController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
+Route::get('configs', [ConfigController::class, 'index']);
 
 Route::get('products_best_sellers', [productsController::class, 'get_best_sellers']);
 Route::get('products_offer_rate', [productsController::class, 'get_offer_rate']);
