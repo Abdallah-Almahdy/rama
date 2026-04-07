@@ -20,9 +20,9 @@ class productsController extends Controller
     {
 
         $prod_id = product::find($request->query('prod_id'));
-      
+
         $data = product::where('id',$prod_id['id'] )->get();
-  
+
         if (!$data) {
             return response()->json([
                 'status' => 'fail',
@@ -62,13 +62,13 @@ class productsController extends Controller
 
     public function get_best_sellers()
     {
-        $data =  product::where('purchase_count', '>', 0)->orderBy('purchase_count', 'desc')->get();
+        $data =  product::where('active', 1)->where('purchase_count', '>', 0)->orderBy('purchase_count', 'desc')->get();
 
         return  productsResource::collection($data);
     }
     public function get_offer_rate()
     {
-        $data =  product::where('offer_rate', '>', 0)->orderBy('offer_rate', 'desc')->get();
+        $data =  product::where('active',1)->where('offer_rate', '>', 0)->orderBy('offer_rate', 'desc')->get();
 
         if (!isset($data[0])) {
             return  response()->json([
@@ -89,10 +89,14 @@ class productsController extends Controller
 
         switch ($request->query('type')) {
             case '1':
-                $data =  product::where('bar_code', 'LIKE', "%{$request->query('search_value')}%")->get();
+                $data =  product::where('bar_code', 'LIKE', "%{$request->query('search_value')}%")
+                ->where('active',1)
+                ->get();
                 break;
             case '2':
-                $data =  product::where('name', 'LIKE', "%{$request->query('search_value')}%")->get();
+                $data =  product::where('name', 'LIKE', "%{$request->query('search_value')}%")
+                ->where('active',1)
+                ->get();
                 break;
             default:
                 $data =  [];
