@@ -27,7 +27,7 @@ class AuthController extends Controller
     'name' => ['required', 'string', 'max:255'],
     'email' => ['required', 'string', 'max:255', 'unique:' . User::class],
     'password' => ['required', 'confirmed', Rules\Password::defaults()],
-   
+
     'addressFloorNumber' => ['nullable', 'string'],
     'addressBuildingNumber' => ['nullable', 'string'],
     'addressStreet' => ['nullable', 'string'],
@@ -50,20 +50,11 @@ class AuthController extends Controller
             );
         }
 
-
-
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-
-
-
-        
-
-
 
         $user = customer_info::create([
             'user_id' => $user['id'],
@@ -91,21 +82,21 @@ class AuthController extends Controller
             'stus' => 'registered',
         ], 200);
     }
-    
-  
-  
+
+
+
 
  public function saveCustomerToken(Request $request)
 {
- 
-   
-   
+
+
+
    $request->validate([
             'user_id'           => 'required|integer',
             'notification_token'=> 'required|string',
         ]);
 
-   
+
         $customerInfo = customer_info::where('user_id', $request->user_id)->first();
 
         if (!$customerInfo) {
@@ -123,13 +114,13 @@ class AuthController extends Controller
         ], 200);
 }
 
-   
 
-  
-  
-  
-  
-  
+
+
+
+
+
+
     public function login(Request $request)
     {
 
@@ -161,10 +152,10 @@ class AuthController extends Controller
             200
         );
     }
-  
-  
 
-  
+
+
+
     public function reset_pass(Request $request)
     {
         $user = User::where("email", $request["email"])->first();
@@ -180,7 +171,7 @@ class AuthController extends Controller
             ], 200);
         }
     }
- 
+
     public function update_user_data(Request $request)
     {
 
