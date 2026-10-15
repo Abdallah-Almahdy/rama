@@ -167,7 +167,7 @@ class Index extends Component
 
         if ($this->search === '') {
             $products = Product::orderBy('created_at', 'desc')
-                ->paginate($this->perPage);
+                ->paginate($this->perPage)->withPath(route('products.index'));
             $this->viewLinks = true;
         } else {
             $products = $this->myProducts;
@@ -175,15 +175,15 @@ class Index extends Component
         };
 
         if ($this->showZeroStock) {
-            $products = Product::where('qnt', 0)->orderBy('created_at', 'desc')->paginate($this->perPage);
+            $products = Product::where('qnt', 0)->orderBy('created_at', 'desc')->paginate($this->perPage)->withPath(route('products.index'));
             $this->viewLinks = false;
         } elseif ($this->showInactiveStock) {
-            $products = Product::where('is_avaliable', 0)->orderBy('created_at', 'desc')->paginate($this->perPage);
+            $products = Product::where('is_avaliable', 0)->orderBy('created_at', 'desc')->paginate($this->perPage)->withPath(route('products.index'));
 
             $this->viewLinks = false;
         } else {
             if ($this->search === '') {
-                $products = Product::orderBy('created_at', 'desc')->paginate($this->perPage);
+                $products = Product::orderBy('created_at', 'desc')->paginate($this->perPage)->withPath(route('products.index'));
                 $this->viewLinks = true;
             } else {
                 $products = $this->myProducts;
