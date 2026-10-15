@@ -24,6 +24,7 @@ class Edit extends Component
     public $active;
     public $is_avaliable;
     public $stockQnt;
+
     public function mount($data)
     {
 
@@ -60,10 +61,17 @@ class Edit extends Component
             $product->description = $this->description;
         }
 
-
+       
         if ($this->photo) {
-            $this->validate(['photo' => 'image|mimes:jpeg,jpg,png',]);
-            $product->photo = $this->photo->storeAs('products', rand() . '.jpg', 'my_public');
+            $this->validate([
+                'photo' => 'image|mimes:jpeg,jpg,png',
+            ]);
+
+            $product->photo = $this->photo->storeAs(
+                'uploads/products',
+                rand() . '.' . $this->photo->getClientOriginalExtension(),
+                'my_public'
+            );
         }
 
         if ($this->offer_rate + 0 === 0) {
