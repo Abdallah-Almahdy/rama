@@ -1,3 +1,4 @@
+
 <?php
 
 namespace App\Http\Resources;
@@ -8,50 +9,54 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class userDataResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
+        $country1 = delivery::find(data_get($this, 'addressCountry'));
+        $country2 = delivery::find(data_get($this, 'addressCountry2'));
+
+        $profileImage = data_get($this, 'profileImage');
+
         return [
-            'data' =>
-            [
-                'user_id' => $this->user_id ?? null,
-                'password' => $this->password ?? null,
-               'profileImage' => !empty($this->profileImage) ? env('API_BASE_LINK') . '/uploads/profile_photo/' . $this->profileImage : null,
-                'firstName' => $this->firstName ?? null,
-                'lastName' => $this->lastName ?? null,
-                'phonenum' => $this->phonenum ?? null,
-                'email' => $this->email ?? null,
+            'data' => [
+                'user_id' => data_get($this, 'user_id'),
+                'password' => data_get($this, 'password'),
 
-                // user address 1
-                'addressCountry' => $this->addressCountry ?? null,
-                'addressCountryName' => delivery::find($this->addressCountry + 0)->name ?? null,
-                'addresscity' => $this->addresscity ?? null,
-                'addressstreet' => $this->addressstreet ?? null,
-                'addressbuildingNumber' => $this->addressbuildingNumber ?? null,
-                'addressfloorNumber' => $this->addressfloorNumber ?? null,
-                'addressApartmentNumber' => $this->addressApartmentNumber ?? null,
-                'disSign' => $this->disSign ?? null,
+                'profileImage' => !empty($profileImage)
+                    ? env('API_BASE_LINK') . '/uploads/profile_photo/' . $profileImage
+                    : null,
 
-                // user address 2
-                'addressCountry2' => $this->addressCountry2 ?? null,
-                'addressCountry2Name' => delivery::find($this->addressCountry2 + 0)->name ?? null,
-                'addresscity2' => $this->addresscity2 ?? null,
-                'addressstreet2' => $this->addressstreet2 ?? null,
-                'addressbuildingNumber2' => $this->addressbuildingNumber2 ?? null,
-                'addressfloorNumber2' => $this->addressfloorNumber2 ?? null,
-                'addressApartmentNumber2' => $this->addressApartmentNumber2 ?? null,
-                'disSign2' => $this->disSign2 ?? null,
+                'firstName' => data_get($this, 'firstName'),
+                'lastName' => data_get($this, 'lastName'),
+                'phonenum' => data_get($this, 'phonenum'),
+                'email' => data_get($this, 'email'),
 
-                'gender' => $this->gender ?? null,
-                'birthDate' => $this->birthDate ?? null,
+                // User address 1
+                'addressCountry' => data_get($this, 'addressCountry'),
+                'addressCountryName' => $country1?->name,
+                'addresscity' => data_get($this, 'addresscity'),
+                'addressstreet' => data_get($this, 'addressstreet'),
+                'addressbuildingNumber' => data_get($this, 'addressbuildingNumber'),
+                'addressfloorNumber' => data_get($this, 'addressfloorNumber'),
+                'addressApartmentNumber' => data_get($this, 'addressApartmentNumber'),
+                'disSign' => data_get($this, 'disSign'),
+
+                // User address 2
+                'addressCountry2' => data_get($this, 'addressCountry2'),
+                'addressCountry2Name' => $country2?->name,
+                'addresscity2' => data_get($this, 'addresscity2'),
+                'addressstreet2' => data_get($this, 'addressstreet2'),
+                'addressbuildingNumber2' => data_get($this, 'addressbuildingNumber2'),
+                'addressfloorNumber2' => data_get($this, 'addressfloorNumber2'),
+                'addressApartmentNumber2' => data_get($this, 'addressApartmentNumber2'),
+                'disSign2' => data_get($this, 'disSign2'),
+
+                'gender' => data_get($this, 'gender'),
+                'birthDate' => data_get($this, 'birthDate'),
             ],
-            "message" => "user info has been fetched successfully",
-            "stus" => "success",
-            "code" => 200,
+
+            'message' => 'user info has been fetched successfully',
+            'status' => 'success',
+            'code' => 200,
         ];
     }
 }
