@@ -9,7 +9,7 @@ class notificationsService
     public function getServerKeyToken()
     {
         // Path to your service account key file
-       	$keyFilePath = '/home/hstgr-test-srv599157/htdocs/test.srv599157.hstgr.cloud/app/Services/rama-607e8-firebase-adminsdk-fbsvc-f83e265bb0.json';
+       	$keyFilePath = '/home/rama-suez/htdocs/rama-suez.com/app/Services/rama-607e8-firebase-adminsdk-fbsvc-514164e50e.json';
 
         // Create a Google client
         $client = new Google_Client();
