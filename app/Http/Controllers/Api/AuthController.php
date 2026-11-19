@@ -215,9 +215,9 @@ class AuthController extends Controller
         if ($verify_user->id ?? null) {
 
 
-            $user_info = customer_info::where('user_id', $verify_user->id)->get(); // error
-            if (count($user_info)) {
-                return new userDataResource($user_info[0]);
+            $user_info = customer_info::where('user_id', $verify_user->id)->first(); // error
+            if ($user_info) {
+                return new userDataResource($user_info);
             }
 
             return response()->json(
