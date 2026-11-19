@@ -20,7 +20,7 @@ class userDataResource extends JsonResource
             [
                 'user_id' => $this->user_id ?? null,
                 'password' => $this->password ?? null,
-                'profileImage' => ($this->profileImage) ? env('API_BASE_LINK') . '/uploads/profile_photo/' . $this->profileImage  : null,
+               'profileImage' => !empty($this->profileImage) ? env('API_BASE_LINK') . '/uploads/profile_photo/' . $this->profileImage : null,
                 'firstName' => $this->firstName ?? null,
                 'lastName' => $this->lastName ?? null,
                 'phonenum' => $this->phonenum ?? null,
