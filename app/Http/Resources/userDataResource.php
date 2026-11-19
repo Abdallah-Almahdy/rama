@@ -18,13 +18,13 @@ class userDataResource extends JsonResource
         return [
             'data' =>
             [
-                'user_id' => $this->user_id,
-                'password' => $this->password,
+                'user_id' => $this->user_id ?? null,
+                'password' => $this->password ?? null,
                 'profileImage' => ($this->profileImage) ? env('API_BASE_LINK') . '/uploads/profile_photo/' . $this->profileImage  : null,
-                'firstName' => $this->firstName,
-                'lastName' => $this->lastName,
-                'phonenum' => $this->phonenum,
-                'email' => $this->email,
+                'firstName' => $this->firstName ?? null,
+                'lastName' => $this->lastName ?? null,
+                'phonenum' => $this->phonenum ?? null,
+                'email' => $this->email ?? null,
 
                 // user address 1
                 'addressCountry' => $this->addressCountry ?? null,
